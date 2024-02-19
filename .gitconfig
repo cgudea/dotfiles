@@ -1,0 +1,65 @@
+[alias]
+    lg = log --graph --abbrev-commit --decorate --pretty=format:'%>|(12)%C(bold blue)%h %<(70,trunc)%C(reset)%s %>(12,trunc)%C(bold green)%ar %>(12) %C(bold cyan)%an%C(italic yellow)%d'
+    lga = log --graph --abbrev-commit --decorate --pretty=format:'%>|(12)%C(bold blue)%h %<(70,trunc)%C(reset)%s %>(12,trunc)%C(bold green)%ar %>(12) %C(bold cyan)%an%C(italic yellow)%d' --all
+    lgx = "!f() { x=${1-4}; length=`expr $x + 8`; git log --color --graph --pretty=format:\"%>|($length)%C(bold blue)%h %<(70,trunc)%C(reset)%s %>(12,trunc)%C(bold green)%ar %>(12) %C(bold cyan)%an%C(italic yellow)%d'\"; }; f"
+    stat = status -sb
+    ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    merge-delete = "!f() { git merge $1 --no-ff; git branch -d $1; }; f"
+    unmerged = "!git branch --no-merged | grep -vE 'master|development'"
+    identities = "!git config --get-regexp user.[:alpha:].*"
+    identity = "!git config --local --get-regexp user.*"
+    set-identity = ! [[ ! -z "$1" ]] \
+        && git config --local user.name \"$(git config user.$1.name)\" \
+        && git config --local user.email \"$(git config user.$1.email)\" \
+        && git config --local user.signingkey \"$(git config user.$1.signingkey)\" \
+        && git config --local --get-regex user.* \
+        || echo "Must include one identity!" && git config --global --get-regexp user.*.name
+    changelog = ! git log --pretty=%B main..HEAD | sed '/^[ \t]*$/d'
+    alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+[core]
+    editor = vim
+    pager = delta
+[delta]
+    dark = true
+    line-numbers = true
+    plus-style = green bold "#013820"
+    minus-style = red "#800021"
+[interactive]
+    diffFilter = delta --color-only
+[color]
+    branch = auto
+    diff = auto
+    status = auto
+    showbranch = auto
+    ui = true
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[color "status"]
+    added = green normal bold
+    changed = yellow normal bold
+    untracked = white normal bold
+    header = white normal bold
+    updated = green normal bold
+    branch = magenta normal bold
+    nobranch = normal normal bold
+    unmerged = red normal bold
+[user]
+    useConfigOnly = true
+[user "puladev"]
+    name = Chris G
+    email = chris@pula.dev
+    signingkey = B55DD3C020441FAF
+[merge]
+    commit = no
+    ff = no
+[init]
+    defaultBranch = main
+[pull]
+    rebase = true
